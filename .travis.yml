@@ -9,4 +9,7 @@ cache:
     - $HOME/.gradle/
 
 script:
-    - ./gradlew check jacocoTestReport coveralls
+    - ./gradlew check
+
+after_script:
+    - ./gradlew jacocoTestReport coveralls
