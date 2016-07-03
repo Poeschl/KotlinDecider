@@ -22,13 +22,16 @@ class ApplicationTest {
         System.setOut(PrintStream(outContent))
     }
 
-    @Ignore //No nice option to inject the test mock objects
+    @Ignore //TODO: Find a nice way to inject mocked new instances AND test also with cmd arguments
     @Test
     fun testRun() {
         val optionGetterMock: MemoryOptionGetter = mock()
         `when`(optionGetterMock.options).thenReturn(arrayListOf("A", "B", "C"))
         val deciderMock: Decider = mock()
         `when`(deciderMock.getDecision()).thenReturn("A")
+//        PowerMockito.whenNew(MemoryOptionGetter::class.java).withNoArguments().thenReturn(optionGetterMock)
+//        PowerMockito.whenNew(Decider::class.java).withNoArguments().thenReturn(deciderMock)
+
         val appTest = Application()
 
         appTest.run()
@@ -44,5 +47,4 @@ class ApplicationTest {
 
         assertThat(outContent.toString().trim()).isEqualTo("Test")
     }
-
 }
