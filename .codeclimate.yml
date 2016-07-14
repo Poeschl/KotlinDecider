@@ -1,0 +1,11 @@
+---
+engines:
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+ratings:
+  paths:
+    - "src/main/**/*"
+    - "src/test/**/*"
+exclude_paths: []
