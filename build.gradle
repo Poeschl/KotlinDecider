@@ -42,6 +42,10 @@ jacocoTestReport {
     }
 }
 
+coveralls {
+    sourceDirs += ['src/main/kotlin']
+}
+
 //noinspection GroovyAssignabilityCheck
 jar {
     manifest {
