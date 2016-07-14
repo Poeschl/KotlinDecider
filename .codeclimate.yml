@@ -8,4 +8,5 @@ ratings:
   paths:
     - "src/main/**/*"
     - "src/test/**/*"
+    - "*.md"
 exclude_paths: []
