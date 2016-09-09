@@ -20,23 +20,22 @@ class Application(args: Array<String> = emptyArray()) : Decider.RoundListener {
     @Option(name = "--options", usage = "Specify a comma separated list of options to choose from.", aliases = arrayOf("-o"))
     private var cmdInputOptions = ""
 
+    private var correctInitialized = true
+
     init {
         parseArgs(args)
 
-        if (!cmdInputOptions.isEmpty()) {
-            optionGetter = StringOptionGetter(cmdInputOptions)
-        } else {
-            CmdLineParser(this).printUsage(System.out)
-            optionGetter = StringOptionGetter("A,B,C")
-        }
+        optionGetter = StringOptionGetter(cmdInputOptions)
         decider = Decider(optionGetter.options)
     }
 
     fun run() {
-        decider.roundListener = this
-        val finalChoice = decider.getDecision()
-        println("##############")
-        println(finalChoice)
+        if (correctInitialized) {
+            decider.roundListener = this
+            val finalChoice = decider.getDecision()
+            println("##############")
+            println(finalChoice)
+        }
     }
 
     override fun onRoundChoice(roundChoice: String) {
@@ -53,7 +52,7 @@ class Application(args: Array<String> = emptyArray()) : Decider.RoundListener {
             System.err.println(ex.message)
             cmdParser.printUsage(System.out)
             System.out.println("Example: java KotlinDecider" + cmdParser.printExample(org.kohsuke.args4j.OptionHandlerFilter.ALL))
-            System.exit(1);
+            correctInitialized = false
         }
     }
 }

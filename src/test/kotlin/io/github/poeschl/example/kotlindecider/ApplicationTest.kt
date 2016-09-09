@@ -13,13 +13,13 @@ import java.io.PrintStream
 class ApplicationTest {
 
     private val outContent = ByteArrayOutputStream()
+    private val errContent = ByteArrayOutputStream()
 
     @Before
     fun setup() {
         System.setOut(PrintStream(outContent))
+        System.setErr(PrintStream(errContent))
     }
-
-    //TODO: Find a nice way to inject mocked new instances AND test also with cmd arguments
 
     @Test
     fun testOnRoundChoice() {
@@ -28,5 +28,25 @@ class ApplicationTest {
         appTest.onRoundChoice("Test")
 
         assertThat(outContent.toString().trim()).isEqualTo("Test")
+    }
+
+    @Test
+    fun testWrongCommandLineInput() {
+        val appTest = Application(arrayOf("-foobar"))
+
+        appTest.run()
+
+        assertThat(errContent.toString().trim()).contains("is not a valid option")
+        assertThat(outContent.toString().trim()).doesNotContain("##############")
+    }
+
+    @Test
+    fun testOptionsInCommandLine() {
+        val appTest = Application(arrayOf("-o", "A,B,C"))
+
+        appTest.run()
+
+        assertThat(errContent.toString().trim()).isEmpty()
+        assertThat(outContent.toString().trim()).contains("##############")
     }
 }
