@@ -17,7 +17,7 @@ class Application(args: Array<String> = emptyArray()) : Decider.RoundListener {
     private val optionGetter: OptionGetter
     private val decider: Decider
 
-    @Option(name = "--options", usage = "Specify a comma seperated list of options to choose from.", aliases = arrayOf("-o"))
+    @Option(name = "--options", usage = "Specify a comma separated list of options to choose from.", aliases = arrayOf("-o"))
     private var cmdInputOptions = ""
 
     init {

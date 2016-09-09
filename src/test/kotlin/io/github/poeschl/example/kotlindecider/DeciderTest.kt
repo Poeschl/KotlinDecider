@@ -12,7 +12,7 @@ import java.util.*
  * Project: KotlinDecider
  * Created by Markus Pöschl on 01.07.16.
  */
-class DeciderImplTest {
+class DeciderTest {
 
     @Test
     fun testLongestDecision() {
@@ -23,7 +23,7 @@ class DeciderImplTest {
 
         val decisionResult = testDecider.getDecision()
 
-        val expectedIndex = Decider.MAX_RANDOM_ROUNDS % 3
+        val expectedIndex = (Decider.MIN_RANDOM_ROUNDS + Decider.MAX_RANDOM_ROUNDS) % 3
         Assertions.assertThat(decisionResult).isEqualTo(testList[expectedIndex])
     }
 
@@ -36,20 +36,21 @@ class DeciderImplTest {
 
         val decisionResult = testDecider.getDecision()
 
-        Assertions.assertThat(decisionResult).isEqualTo(testList[0])
+        val expectedIndex = Decider.MIN_RANDOM_ROUNDS % 3
+        Assertions.assertThat(decisionResult).isEqualTo(testList[expectedIndex])
     }
 
     @Test
     fun testRoundListener() {
         val testList = arrayListOf("A", "B", "C")
         val randomMock: Random = mock()
-        `when`(randomMock.nextDouble()).thenReturn(0.1)
+        `when`(randomMock.nextDouble()).thenReturn(0.0)
         val listenerMock: Decider.RoundListener = mock()
         val testDecider = Decider(testList, randomMock)
         testDecider.roundListener = listenerMock
 
         testDecider.getDecision()
 
-        verify(listenerMock, com.nhaarman.mockito_kotlin.times(Decider.MAX_RANDOM_ROUNDS / 10 + 1)).onRoundChoice(any())
+        verify(listenerMock, com.nhaarman.mockito_kotlin.times(Decider.MIN_RANDOM_ROUNDS + 1)).onRoundChoice(any())
     }
 }
