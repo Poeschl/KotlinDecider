@@ -49,4 +49,14 @@ class ApplicationTest {
         assertThat(errContent.toString().trim()).isEmpty()
         assertThat(outContent.toString().trim()).contains("##############")
     }
+
+    @Test
+    fun testSeveralRuns() {
+        val appTest = Application(arrayOf("-o", "A,B,C", "-r", "2"))
+
+        appTest.run()
+
+        //Checks if the printout contains two results in the end
+        assertThat(outContent.toString().trim()).matches("(.*|\n)*#+\n(.+\n?){2}")
+    }
 }

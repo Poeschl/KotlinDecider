@@ -19,6 +19,8 @@ class Application(args: Array<String> = emptyArray()) : Decider.RoundListener {
 
     @Option(name = "--options", usage = "Specify a comma separated list of options to choose from.", aliases = arrayOf("-o"))
     private var cmdInputOptions = ""
+    @Option(name = "--runs", usage = "Specify the runs which should be considered.", aliases = arrayOf("-r"), required = false)
+    private var cmdRuns = 1
 
     private var correctInitialized = true
 
@@ -30,11 +32,16 @@ class Application(args: Array<String> = emptyArray()) : Decider.RoundListener {
     }
 
     fun run() {
-        if (correctInitialized) {
+        if (correctInitialized && cmdInputOptions.isNotEmpty()) {
             decider.roundListener = this
-            val finalChoice = decider.getDecision()
+            val resultList = mutableListOf<String>()
+
+            for (i in 0..cmdRuns - 1) {
+                resultList.add(decider.getDecision())
+                println("---\n" + resultList[i])
+            }
             println("##############")
-            println(finalChoice)
+            resultList.forEach { println(it) }
         }
     }
 
@@ -51,7 +58,7 @@ class Application(args: Array<String> = emptyArray()) : Decider.RoundListener {
         } catch (ex: CmdLineException) {
             System.err.println(ex.message)
             cmdParser.printUsage(System.out)
-            System.out.println("Example: java KotlinDecider" + cmdParser.printExample(org.kohsuke.args4j.OptionHandlerFilter.ALL))
+            println("Example: java KotlinDecider" + cmdParser.printExample(org.kohsuke.args4j.OptionHandlerFilter.ALL))
             correctInitialized = false
         }
     }
