@@ -1,11 +1,8 @@
 package io.github.poeschl.example.kotlindecider
 
-import com.nhaarman.mockito_kotlin.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
@@ -22,26 +19,11 @@ class ApplicationTest {
         System.setOut(PrintStream(outContent))
     }
 
-    @Ignore //TODO: Find a nice way to inject mocked new instances AND test also with cmd arguments
-    @Test
-    fun testRun() {
-        val optionGetterMock: MemoryOptionGetter = mock()
-        `when`(optionGetterMock.options).thenReturn(arrayListOf("A", "B", "C"))
-        val deciderMock: Decider = mock()
-        `when`(deciderMock.getDecision()).thenReturn("A")
-//        PowerMockito.whenNew(MemoryOptionGetter::class.java).withNoArguments().thenReturn(optionGetterMock)
-//        PowerMockito.whenNew(Decider::class.java).withNoArguments().thenReturn(deciderMock)
-
-        val appTest = Application()
-
-        appTest.run()
-
-        assertThat(outContent.toString().trim()).contains("##############").endsWith("A").doesNotEndWith("B").doesNotEndWith("C")
-    }
+    //TODO: Find a nice way to inject mocked new instances AND test also with cmd arguments
 
     @Test
     fun testOnRoundChoice() {
-        val appTest = Application()
+        val appTest = Application(arrayOf("-o", "A"))
 
         appTest.onRoundChoice("Test")
 

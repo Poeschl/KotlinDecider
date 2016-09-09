@@ -23,10 +23,11 @@ class Application(args: Array<String> = emptyArray()) : Decider.RoundListener {
     init {
         parseArgs(args)
 
-        if (cmdInputOptions.isEmpty()) {
-            optionGetter = MemoryOptionGetter()
-        } else {
+        if (!cmdInputOptions.isEmpty()) {
             optionGetter = StringOptionGetter(cmdInputOptions)
+        } else {
+            CmdLineParser(this).printUsage(System.out)
+            optionGetter = StringOptionGetter("A,B,C")
         }
         decider = Decider(optionGetter.options)
     }
